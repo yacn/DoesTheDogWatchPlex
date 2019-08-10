@@ -1,10 +1,16 @@
 from apis.doesthedogdie import get_info_for_movie
 from apis.plex import get_movies_and_format
+import argparse
 import json
 import requests
 import urllib.parse
 
 from tqdm import tqdm
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--output", default="movies.json",
+    help="relative or absolute path to write DTDD json info to")
+
 try:
     from config import only_show_yes
 except:
@@ -32,7 +38,6 @@ except:
     print("⚠ Please set use_short_names in your config.py")
     use_short_names = False
 
-
 def yes_or_no_formatter(topic):
     action = "Unsure"
     
@@ -43,6 +48,7 @@ def yes_or_no_formatter(topic):
     return "{topic} : {action} (Yes: {yes_votes} | No : {no_votes})\n".format(topic=topic['topic'], yes_votes=topic['yes_votes'], no_votes=topic['no_votes'], action=action), action, topic['topic_short']
 
 def main():
+    args = parser.parse_args()
     print("⬇ Getting movies from Plex")
     movies = get_movies_and_format()
 
@@ -76,7 +82,7 @@ def main():
     # all we need to do now is chuck it in a big ol' json file
 
     print("✏ Writing to JSON file")
-    with open("movies.json", "w") as f:
+    with open(args.output, "w") as f:
         f.write(json.dumps(to_write, indent=4))
     print("✅ Done!")
 

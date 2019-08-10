@@ -4,10 +4,10 @@ import requests
 import time
 import json
 try:
-    from config import use_memcache
+    from .config import use_memcache
     if  use_memcache:
         try:
-            from config import memcache_address, memcache_port, invalidation_time
+            from .config import memcache_address, memcache_port, invalidation_time
         except ImportError:
             print("⚠ Please set memcache_address, memcache_port and invalidation_time in config.py")
             use_memcache = False
